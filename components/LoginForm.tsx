@@ -102,7 +102,7 @@ export default function LoginForm({ onGuestAccess }: LoginFormProps) {
         </div>
 
         <div className="mt-6 text-center text-sm text-gray-600">
-          <p>💡 للحصول على حساب مشرف، تواصل مع مدير النظام</p>
+          <p>💡      المشرف العام الخليل محمد الجراح  </p>
         </div>
       </div>
     </div>
