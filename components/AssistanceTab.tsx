@@ -364,7 +364,7 @@ export default function AssistanceTab() {
             onClick={() => setShowForm(!showForm)}
             className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-sm sm:text-base"
           >
-            {showForm ? '❌ إلغاء' : '➕ إضافة مساعدة جديدة'}
+            {showForm ? '❌ إلغاء' : '➕ إضافة   مستفيد(ة)   جديدة'}
           </button>
         </div>
       )}
@@ -372,7 +372,7 @@ export default function AssistanceTab() {
       {/* Add Form */}
       {showForm && (
         <form onSubmit={handleSubmit} className="mb-4 sm:mb-6 p-4 sm:p-6 bg-green-50 rounded-lg">
-          <h3 className="text-base sm:text-lg font-semibold mb-4 text-green-900">تسجيل مساعدة جديدة</h3>
+          <h3 className="text-base sm:text-lg font-semibold mb-4 text-green-900">تسجيل  مستفيد(ة) جديدة</h3>
  
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             <div>
@@ -396,7 +396,7 @@ export default function AssistanceTab() {
                 type="text"
                 value={formData.case_name}
                 onChange={(e) => setFormData({ ...formData, case_name: e.target.value })}
-                placeholder="مثال: أسرة أحمد"
+                placeholder="مثال:  أحمد"
                 className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base"
                 required
               />
@@ -410,7 +410,7 @@ export default function AssistanceTab() {
                 type="text"
                 value={formData.reason}
                 onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
-                placeholder="مثال: مرض، وفاة، زواج..."
+                placeholder="مثال: مرض،  ..."
                 className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm sm:text-base"
               />
             </div>

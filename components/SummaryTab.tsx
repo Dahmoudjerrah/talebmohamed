@@ -369,6 +369,145 @@
 //     </div>
 //   );
 // }
+// 'use client';
+
+// import { useEffect, useState } from 'react';
+// import { supabase } from '../lib/supabase';
+
+// interface SummaryData {
+//   totalMembers: number;
+//   totalIncome: number;
+//   totalAssistanceAmount: number;
+//   totalAssistanceCases: number;
+//   currentBalance: number;
+// }
+
+// export default function SummaryTab() {
+//   const [summary, setSummary] = useState<SummaryData>({
+//     totalMembers: 0,
+//     totalIncome: 0,
+//     totalAssistanceAmount: 0,
+//     totalAssistanceCases: 0,
+//     currentBalance: 0,
+//   });
+//   const [loading, setLoading] = useState(true);
+//   const [notes, setNotes] = useState('');
+
+//   useEffect(() => {
+//     fetchSummary();
+//   }, []);
+
+//   const fetchSummary = async () => {
+//     try {
+//       const { count: membersCount } = await supabase
+//         .from('members')
+//         .select('*', { count: 'exact' });
+
+//       const { data: subscriptions } = await supabase
+//         .from('subscriptions')
+//         .select('amount_paid')
+//         .eq('paid', true);
+
+//       const totalIncome = subscriptions?.reduce((sum, sub) => sum + (sub.amount_paid || 0), 0) || 0;
+
+//       const { data: assistances } = await supabase
+//         .from('assistance')
+//         .select('amount');
+
+//       const totalAssistanceAmount = assistances?.reduce((sum, a) => sum + Number(a.amount), 0) || 0;
+//       const currentBalance = totalIncome - totalAssistanceAmount;
+
+//       setSummary({
+//         totalMembers: membersCount || 0,
+//         totalIncome,
+//         totalAssistanceAmount,
+//         totalAssistanceCases: assistances?.length || 0,
+//         currentBalance,
+//       });
+//     } catch (error) {
+//       console.error('Error fetching summary:', error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   if (loading) {
+//     return <div className="text-center py-8">جاري التحميل...</div>;
+//   }
+
+//   return (
+//     <div>
+//       <h2 className="text-xl sm:text-2xl font-bold text-indigo-900 mb-4 sm:mb-6">ملخص الصندوق</h2>
+
+//       {/* Statistics Cards */}
+//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
+
+//         {/* Current Balance */}
+//         <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-lg p-4 sm:p-6 shadow-lg">
+//           <div className="flex items-center justify-between">
+//             <div>
+//               <p className="text-xs sm:text-sm opacity-90 mb-1">الرصيد الحالي</p>
+//               <p className="text-lg sm:text-2xl font-bold" dir="ltr">{summary.currentBalance.toFixed(2)} MRO</p>
+//             </div>
+//             <div className="text-3xl sm:text-5xl opacity-80">💵</div>
+//           </div>
+//         </div>
+
+//         {/* Total Members */}
+//         <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg p-4 sm:p-6 shadow-lg">
+//           <div className="flex items-center justify-between">
+//             <div>
+//               <p className="text-xs sm:text-sm opacity-90 mb-1">عدد الأسر</p>
+//               <p className="text-2xl sm:text-3xl font-bold">{summary.totalMembers}</p>
+//             </div>
+//             <div className="text-3xl sm:text-5xl opacity-80">👥</div>
+//           </div>
+//         </div>
+
+//         {/* Total Income */}
+//         <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-lg p-4 sm:p-6 shadow-lg">
+//           <div className="flex items-center justify-between">
+//             <div>
+//               <p className="text-xs sm:text-sm opacity-90 mb-1">إجمالي الدخل الفعلي</p>
+//               <p className="text-lg sm:text-2xl font-bold" dir="ltr">{summary.totalIncome.toFixed(2)} MRO</p>
+//             </div>
+//             <div className="text-3xl sm:text-5xl opacity-80">📥</div>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Assistance Summary */}
+//       <div className="bg-white border-2 border-green-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+//         <h3 className="text-lg sm:text-xl font-bold text-green-900 mb-4">🤝 ملخص المساعدات</h3>
+//         <div className="space-y-3">
+//           <div className="flex justify-between items-center py-2 sm:py-3 border-b text-sm sm:text-base">
+//             <span className="text-gray-700">عدد الحالات المساعدة:</span>
+//             <span className="font-bold text-green-900">{summary.totalAssistanceCases}</span>
+//           </div>
+//           <div className="flex justify-between items-center py-2 sm:py-3 text-sm sm:text-base">
+//             <span className="text-gray-700">إجمالي المبالغ المصروفة:</span>
+//             <span className="font-bold text-red-600" dir="ltr">{summary.totalAssistanceAmount.toFixed(2)} MRO</span>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Notes Section */}
+//       <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 sm:p-6">
+//         <h3 className="text-lg sm:text-xl font-bold text-yellow-900 mb-4">📝 ملاحظات عامة</h3>
+//         <textarea
+//           value={notes}
+//           onChange={(e) => setNotes(e.target.value)}
+//           placeholder="اكتب ملاحظاتك هنا..."
+//           className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-yellow-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent resize-none text-sm sm:text-base"
+//           rows={5}
+//         />
+//         <p className="text-xs sm:text-sm text-gray-600 mt-2">
+//           💡 يمكنك استخدام هذا المكان لتسجيل ملاحظات عامة
+//         </p>
+//       </div>
+//     </div>
+//   );
+// }
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -399,22 +538,32 @@ export default function SummaryTab() {
 
   const fetchSummary = async () => {
     try {
+      // عدد الأسر
       const { count: membersCount } = await supabase
         .from('members')
         .select('*', { count: 'exact' });
 
+      // الدخل من الاشتراكات الشهرية (السنة الحالية)
       const { data: subscriptions } = await supabase
         .from('subscriptions')
         .select('amount_paid')
         .eq('paid', true);
+      const monthlyIncome = subscriptions?.reduce((sum, sub) => sum + (sub.amount_paid || 0), 0) || 0;
 
-      const totalIncome = subscriptions?.reduce((sum, sub) => sum + (sub.amount_paid || 0), 0) || 0;
+      // الدخل من الدفعات السنوية المجمّعة (السنوات السابقة)
+      const { data: yearlyPayments } = await supabase
+        .from('yearly_payments')
+        .select('total_amount');
+      const yearlyIncome = yearlyPayments?.reduce((sum, y) => sum + Number(y.total_amount), 0) || 0;
 
+      const totalIncome = monthlyIncome + yearlyIncome;
+
+      // المساعدات
       const { data: assistances } = await supabase
         .from('assistance')
         .select('amount');
-
       const totalAssistanceAmount = assistances?.reduce((sum, a) => sum + Number(a.amount), 0) || 0;
+
       const currentBalance = totalIncome - totalAssistanceAmount;
 
       setSummary({
@@ -431,9 +580,7 @@ export default function SummaryTab() {
     }
   };
 
-  if (loading) {
-    return <div className="text-center py-8">جاري التحميل...</div>;
-  }
+  if (loading) return <div className="text-center py-8">جاري التحميل...</div>;
 
   return (
     <div>
@@ -491,14 +638,14 @@ export default function SummaryTab() {
         </div>
       </div>
 
-      {/* Notes Section */}
+      {/* Notes */}
       <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 sm:p-6">
         <h3 className="text-lg sm:text-xl font-bold text-yellow-900 mb-4">📝 ملاحظات عامة</h3>
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder="اكتب ملاحظاتك هنا..."
-          className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-yellow-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent resize-none text-sm sm:text-base"
+          className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-yellow-300 rounded-lg focus:ring-2 focus:ring-yellow-500 resize-none text-sm sm:text-base"
           rows={5}
         />
         <p className="text-xs sm:text-sm text-gray-600 mt-2">
