@@ -110,7 +110,7 @@ export default function Home() {
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-6">
           <div className="flex justify-between items-center mb-2">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-900">
-              صندوق أسرة أهل الجراح
+                أهل الطالب محمد 
             </h1>
             <div className="flex items-center gap-2 sm:gap-4">
               {user ? (
