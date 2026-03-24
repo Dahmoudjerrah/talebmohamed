@@ -1652,7 +1652,7 @@ export default function SubscriptionsTab() {
   const [memberToDelete, setMemberToDelete] = useState<Member | null>(null);
 
   const currentYear = new Date().getFullYear();
-  const MONTHLY_START_YEAR = 2026;
+  const MONTHLY_START_YEAR = 2025;
   const isPastYear = selectedYear < MONTHLY_START_YEAR;
   const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
 
