@@ -3,7 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "../components/AuthProvider";
 
 export const metadata: Metadata = {
-  title: "صندوق التكافل",
+  title: "  أهل الطالب محمد ",
   description: "نظام إدارة صندوق التكافل والتضامن",
 };
 
