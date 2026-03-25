@@ -1839,7 +1839,7 @@ export default function SubscriptionsTab() {
             {/* عنوان */}
             <div className="text-center mb-6">
               <div className="text-4xl mb-2">📅</div>
-              <h3 className="text-xl font-bold text-amber-800">مجموع اشتراكات سنة {selectedYear}</h3>
+              <h3 className="text-xl font-bold text-amber-800">مجموع اشتراكات سنة 2025</h3>
               <p className="text-sm text-amber-600 mt-1">المبلغ الإجمالي الذي تم تحصيله في هذه السنة</p>
             </div>
 

@@ -508,6 +508,153 @@
 //     </div>
 //   );
 // }
+// 'use client';
+
+// import { useEffect, useState } from 'react';
+// import { supabase } from '../lib/supabase';
+
+// interface SummaryData {
+//   totalMembers: number;
+//   totalIncome: number;
+//   totalAssistanceAmount: number;
+//   totalAssistanceCases: number;
+//   currentBalance: number;
+// }
+
+// export default function SummaryTab() {
+//   const [summary, setSummary] = useState<SummaryData>({
+//     totalMembers: 0,
+//     totalIncome: 0,
+//     totalAssistanceAmount: 0,
+//     totalAssistanceCases: 0,
+//     currentBalance: 0,
+//   });
+//   const [loading, setLoading] = useState(true);
+//   const [notes, setNotes] = useState('');
+
+//   useEffect(() => {
+//     fetchSummary();
+//   }, []);
+
+//   const fetchSummary = async () => {
+//     try {
+//       // عدد الأسر
+//       const { count: membersCount } = await supabase
+//         .from('members')
+//         .select('*', { count: 'exact' });
+
+//       // الدخل من الاشتراكات الشهرية (السنة الحالية)
+//       const { data: subscriptions } = await supabase
+//         .from('subscriptions')
+//         .select('amount_paid')
+//         .eq('paid', true);
+//       const monthlyIncome = subscriptions?.reduce((sum, sub) => sum + (sub.amount_paid || 0), 0) || 0;
+
+//       // الدخل من الدفعات السنوية المجمّعة (السنوات السابقة)
+//       const { data: yearlyPayments } = await supabase
+//         .from('yearly_payments')
+//         .select('total_amount');
+//       const yearlyIncome = yearlyPayments?.reduce((sum, y) => sum + Number(y.total_amount), 0) || 0;
+
+//       const totalIncome = monthlyIncome + yearlyIncome;
+
+//       // المساعدات
+//       const { data: assistances } = await supabase
+//         .from('assistance')
+//         .select('amount');
+//       const totalAssistanceAmount = assistances?.reduce((sum, a) => sum + Number(a.amount), 0) || 0;
+
+//       const currentBalance = totalIncome - totalAssistanceAmount;
+
+//       setSummary({
+//         totalMembers: membersCount || 0,
+//         totalIncome,
+//         totalAssistanceAmount,
+//         totalAssistanceCases: assistances?.length || 0,
+//         currentBalance,
+//       });
+//     } catch (error) {
+//       console.error('Error fetching summary:', error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   if (loading) return <div className="text-center py-8">جاري التحميل...</div>;
+
+//   return (
+//     <div>
+//       <h2 className="text-xl sm:text-2xl font-bold text-indigo-900 mb-4 sm:mb-6">ملخص الصندوق</h2>
+
+//       {/* Statistics Cards */}
+//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
+
+//         {/* Current Balance */}
+//         <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-lg p-4 sm:p-6 shadow-lg">
+//           <div className="flex items-center justify-between">
+//             <div>
+//               <p className="text-xs sm:text-sm opacity-90 mb-1">الرصيد الحالي</p>
+//               <p className="text-lg sm:text-2xl font-bold" dir="ltr">{summary.currentBalance.toFixed(2)} MRO</p>
+//             </div>
+//             <div className="text-3xl sm:text-5xl opacity-80">💵</div>
+//           </div>
+//         </div>
+
+//         {/* Total Members */}
+//         <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg p-4 sm:p-6 shadow-lg">
+//           <div className="flex items-center justify-between">
+//             <div>
+//               <p className="text-xs sm:text-sm opacity-90 mb-1">عدد الأسر</p>
+//               <p className="text-2xl sm:text-3xl font-bold">{summary.totalMembers}</p>
+//             </div>
+//             <div className="text-3xl sm:text-5xl opacity-80">👥</div>
+//           </div>
+//         </div>
+
+//         {/* Total Income */}
+//         <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-lg p-4 sm:p-6 shadow-lg">
+//           <div className="flex items-center justify-between">
+//             <div>
+//               <p className="text-xs sm:text-sm opacity-90 mb-1">إجمالي الدخل الفعلي</p>
+//               <p className="text-lg sm:text-2xl font-bold" dir="ltr">{summary.totalIncome.toFixed(2)} MRO</p>
+//             </div>
+//             <div className="text-3xl sm:text-5xl opacity-80">📥</div>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Assistance Summary */}
+//       <div className="bg-white border-2 border-green-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
+//         <h3 className="text-lg sm:text-xl font-bold text-green-900 mb-4">🤝 ملخص المساعدات</h3>
+//         <div className="space-y-3">
+//           <div className="flex justify-between items-center py-2 sm:py-3 border-b text-sm sm:text-base">
+//             <span className="text-gray-700">عدد الحالات المساعدة:</span>
+//             <span className="font-bold text-green-900">{summary.totalAssistanceCases}</span>
+//           </div>
+//           <div className="flex justify-between items-center py-2 sm:py-3 text-sm sm:text-base">
+//             <span className="text-gray-700">إجمالي المبالغ المصروفة:</span>
+//             <span className="font-bold text-red-600" dir="ltr">{summary.totalAssistanceAmount.toFixed(2)} MRO</span>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Notes */}
+//       <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 sm:p-6">
+//         <h3 className="text-lg sm:text-xl font-bold text-yellow-900 mb-4">📝 ملاحظات عامة</h3>
+//         <textarea
+//           value={notes}
+//           onChange={(e) => setNotes(e.target.value)}
+//           placeholder="اكتب ملاحظاتك هنا..."
+//           className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-yellow-300 rounded-lg focus:ring-2 focus:ring-yellow-500 resize-none text-sm sm:text-base"
+//           rows={5}
+//         />
+//         <p className="text-xs sm:text-sm text-gray-600 mt-2">
+//           💡 يمكنك استخدام هذا المكان لتسجيل ملاحظات عامة
+//         </p>
+//       </div>
+//     </div>
+//   );
+// }
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -521,6 +668,12 @@ interface SummaryData {
   currentBalance: number;
 }
 
+interface YearStat {
+  year: number;
+  count: number;
+  amount: number;
+}
+
 export default function SummaryTab() {
   const [summary, setSummary] = useState<SummaryData>({
     totalMembers: 0,
@@ -529,6 +682,7 @@ export default function SummaryTab() {
     totalAssistanceCases: 0,
     currentBalance: 0,
   });
+  const [yearStats, setYearStats] = useState<YearStat[]>([]);
   const [loading, setLoading] = useState(true);
   const [notes, setNotes] = useState('');
 
@@ -543,14 +697,14 @@ export default function SummaryTab() {
         .from('members')
         .select('*', { count: 'exact' });
 
-      // الدخل من الاشتراكات الشهرية (السنة الحالية)
+      // الدخل الشهري
       const { data: subscriptions } = await supabase
         .from('subscriptions')
         .select('amount_paid')
         .eq('paid', true);
       const monthlyIncome = subscriptions?.reduce((sum, sub) => sum + (sub.amount_paid || 0), 0) || 0;
 
-      // الدخل من الدفعات السنوية المجمّعة (السنوات السابقة)
+      // الدخل السنوي المجمّع
       const { data: yearlyPayments } = await supabase
         .from('yearly_payments')
         .select('total_amount');
@@ -558,14 +712,29 @@ export default function SummaryTab() {
 
       const totalIncome = monthlyIncome + yearlyIncome;
 
-      // المساعدات
+      // المساعدات مع التاريخ
       const { data: assistances } = await supabase
         .from('assistance')
-        .select('amount');
-      const totalAssistanceAmount = assistances?.reduce((sum, a) => sum + Number(a.amount), 0) || 0;
+        .select('amount, date');
 
+      const totalAssistanceAmount = assistances?.reduce((sum, a) => sum + Number(a.amount), 0) || 0;
       const currentBalance = totalIncome - totalAssistanceAmount;
 
+      // تجميع الإحصائيات حسب السنة
+      const byYear: { [year: number]: { count: number; amount: number } } = {};
+      assistances?.forEach((a) => {
+        const year = new Date(a.date).getFullYear();
+        if (!byYear[year]) byYear[year] = { count: 0, amount: 0 };
+        byYear[year].count += 1;
+        byYear[year].amount += Number(a.amount);
+      });
+
+      // ترتيب السنوات تنازلياً
+      const stats: YearStat[] = Object.entries(byYear)
+        .map(([year, val]) => ({ year: parseInt(year), ...val }))
+        .sort((a, b) => b.year - a.year);
+
+      setYearStats(stats);
       setSummary({
         totalMembers: membersCount || 0,
         totalIncome,
@@ -626,16 +795,53 @@ export default function SummaryTab() {
       {/* Assistance Summary */}
       <div className="bg-white border-2 border-green-200 rounded-lg p-4 sm:p-6 mb-4 sm:mb-6">
         <h3 className="text-lg sm:text-xl font-bold text-green-900 mb-4">🤝 ملخص المساعدات</h3>
-        <div className="space-y-3">
+
+        {/* Total global */}
+        <div className="space-y-3 mb-4">
           <div className="flex justify-between items-center py-2 sm:py-3 border-b text-sm sm:text-base">
-            <span className="text-gray-700">عدد الحالات المساعدة:</span>
-            <span className="font-bold text-green-900">{summary.totalAssistanceCases}</span>
+            <span className="text-gray-700 font-semibold">إجمالي عدد الحالات:</span>
+            <span className="font-bold text-green-900 text-lg">{summary.totalAssistanceCases}</span>
           </div>
-          <div className="flex justify-between items-center py-2 sm:py-3 text-sm sm:text-base">
-            <span className="text-gray-700">إجمالي المبالغ المصروفة:</span>
-            <span className="font-bold text-red-600" dir="ltr">{summary.totalAssistanceAmount.toFixed(2)} MRO</span>
+          <div className="flex justify-between items-center py-2 sm:py-3 border-b text-sm sm:text-base">
+            <span className="text-gray-700 font-semibold">إجمالي المبالغ المصروفة:</span>
+            <span className="font-bold text-red-600 text-lg" dir="ltr">{summary.totalAssistanceAmount.toFixed(2)} MRO</span>
           </div>
         </div>
+
+        {/* تفصيل حسب السنة */}
+        {yearStats.length > 0 && (
+          <div>
+            <p className="text-sm font-semibold text-gray-500 mb-3">📊 التفصيل حسب السنة:</p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr className="bg-green-50">
+                    <th className="border border-green-200 px-3 py-2 text-right text-green-800">السنة</th>
+                    <th className="border border-green-200 px-3 py-2 text-center text-green-800">عدد الحالات</th>
+                    <th className="border border-green-200 px-3 py-2 text-center text-green-800">المبلغ المصروف</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {yearStats.map((stat) => (
+                    <tr key={stat.year} className="hover:bg-gray-50">
+                      <td className="border border-gray-200 px-3 py-2 font-bold text-gray-800">
+                        {stat.year}
+                      </td>
+                      <td className="border border-gray-200 px-3 py-2 text-center">
+                        <span className="bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full">
+                          {stat.count}
+                        </span>
+                      </td>
+                      <td className="border border-gray-200 px-3 py-2 text-center font-bold text-red-600" dir="ltr">
+                        {stat.amount.toFixed(2)} MRO
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Notes */}
