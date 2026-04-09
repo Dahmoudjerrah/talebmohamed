@@ -37,17 +37,10 @@ export default function Home() {
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-6">
           <div className="flex justify-between items-center mb-2">
             
-            {/* Logo + Title */}
-            <div className="flex items-center gap-3">
-              <img
-                src="/talebmed.svg"
-                alt="الطالب محمد"
-                className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
-              />
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-900">
                 أهل الطالب محمد
               </h1>
-            </div>
+            
             <div className="flex items-center gap-2 sm:gap-4">
               {user ? (
                 <>
@@ -67,8 +60,8 @@ export default function Home() {
               ) : (
                 <>
                   <div className="text-right">
-                    <p className="text-xs sm:text-sm text-gray-600">👁️ وضع الزائر</p>
-                    <p className="text-xs text-gray-500">مشاهدة فقط</p>
+                    <p className="text-xs sm:text-sm text-gray-600">👁️  الزائر</p>
+                    
                   </div>
                   <button
                     onClick={() => setGuestMode(false)}
@@ -86,7 +79,7 @@ export default function Home() {
           {!user && guestMode && (
             <div className="mt-2 text-center">
               <p className="text-xs sm:text-sm text-yellow-700 bg-yellow-50 py-2 px-4 rounded-lg inline-block">
-                ⚠️ أنت في وضع المشاهدة فقط - لا يمكنك إجراء تعديلات
+                 أنت في وضع المشاهدة فقط   
               </p>
             </div>
           )}

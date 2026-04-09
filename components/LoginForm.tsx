@@ -97,12 +97,12 @@ export default function LoginForm({ onGuestAccess }: LoginFormProps) {
             onClick={onGuestAccess}
             className="mt-4 w-full bg-gray-100 text-gray-700 py-3 rounded-lg hover:bg-gray-200 transition-colors font-semibold border border-gray-300"
           >
-            👁️ الدخول كزائر (مشاهدة فقط)
+            👁️ زائر 
           </button>
         </div>
 
         <div className="mt-6 text-center text-sm text-gray-600">
-          <p>💡      المشرف العام الخليل محمد الجراح  </p>
+          <p>      المشرف العام الخليل محمد الجراح  </p>
         </div>
       </div>
     </div>
