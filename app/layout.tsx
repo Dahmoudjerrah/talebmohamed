@@ -5,6 +5,10 @@ import { AuthProvider } from "../components/AuthProvider";
 export const metadata: Metadata = {
   title: "  أهل الطالب محمد ",
   description: "نظام إدارة صندوق التكافل والتضامن",
+   icons: {
+    icon: "/talebmed.svg",
+    apple: "/talebmed.svg",
+  },
 };
 
 export default function RootLayout({
